@@ -4,6 +4,9 @@ RUN apk update && \
 	apk add --no-cache nginx openssl \
 	pcre \
 	zlib \
+	libressl-dev \
+    gcc \
+    g++ \
 	make
 
 # Copy custom NGINX configuration
@@ -17,6 +20,5 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose HTTPS ports
 EXPOSE 443
-
 # Set the entrypoint
-ENTRYPOINT ["/bin/sh", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

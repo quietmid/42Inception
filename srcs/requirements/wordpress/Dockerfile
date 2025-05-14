@@ -1,4 +1,5 @@
 FROM alpine:3.20.6
+
 # install the required php extension for WordPress
 # - php83: PHP 8.3, basic php package
 # - php83-fpm: PHP-FPM, FastCGI Process Manager for PHP, matches my www.cnf configuration
@@ -34,9 +35,9 @@ RUN curl -sSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-c
 	&& chown -R nginx:nginx /var/www/wordpress \
 	&& chmod -R 755 /var/www/wordpress
 
-COPY conf/www.conf /etc/php83/php-fpm.d/www.conf
+COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
 
-COPY tools/ /usr/local/bin/
+COPY ./tools/ /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/*
 

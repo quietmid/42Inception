@@ -8,23 +8,29 @@ GREEN=$(shell echo -e "\033[1;32m")
 NAME := inception
 # Paths
 # DATA_DIR=home/jlu/data
-DATA_DIR=$(HOME)/data
+DATA_DIR := $(HOME)/data
+DATA_DIR_MARIADB := $(DATA_DIR)/mariadb
+DATA_DIR_WP := $(DATA_DIR)/wordpress
 
 # Docker compose file
-COMPOSE= srcs/docker-compose.yml
+COMPOSE := srcs/docker-compose.yml
 
 # Commands
 .PHONY: all up down clean fclean re
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): $(DATA_DIR_MARIADB) $(DATA_DIR_WP)
 	@echo "$(BLUE)Creating data directories...$(RESET)"
-	@mkdir -p $(DATA_DIR)/mariadb
-	@mkdir -p $(DATA_DIR)/wordpress
 	@echo "$(GREEN)Data directories created at $(DATA_DIR)$(RESET)"
 	cd srcs && docker compose up --build -d
 	touch $(NAME)
+
+$(DATA_DIR_MARIADB):
+	@mkdir -p $@
+
+$(DATA_DIR_WP):
+	@mkdir -p $@
 
 up: $(NAME)
 
