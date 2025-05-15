@@ -41,6 +41,7 @@ fclean: clean
 	@echo "$(YELLOW)Removing data directories...$(RESET)"
 	@sudo rm -rf $(DATA_DIR)
 	@echo "$(GREEN) Removing all unused Docker resources...$(RESET)"
+	docker system prune -f --volumes
 	rm -f $(NAME)
 
 re: fclean $(NAME)
