@@ -6,15 +6,15 @@ set -e
 MAX_RETRIES=30
 RETRY_COUNT=0
 # Wait for MariaDB to be ready
-echo "Waiting for MariaDB..."
-until mysqladmin ping -h mariadb -u $MYSQL_USER --password=$MYSQL_PWD --silent; do
-    if ["$RETRY_COUNT" -ge "$MAX_RETRIES"]; then
-        echo "MariaDB didn't respond after $MAX_RETRIES attempts. Exiting..."
-        exit 1
-    fi
-    echo "Waiting for MariaDB.. in loop"
-    sleep 2
-done
+# echo "Waiting for MariaDB..."
+# until mysqladmin ping -h mariadb -u $MYSQL_USER --password=$MYSQL_PWD --silent; do
+#     if ["$RETRY_COUNT" -ge "$MAX_RETRIES"]; then
+#         echo "MariaDB didn't respond after $MAX_RETRIES attempts. Exiting..."
+#         exit 1
+#     fi
+#     echo "Waiting for MariaDB.. in loop"
+#     sleep 2
+# done
 
 # set up database connection and admin user
 if [ ! -f /var/www/wordpress/wp-config.php ]; then
@@ -29,7 +29,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
     wp core install \
     	--url="$DOMAIN_NAME" \
 		--title="$WP_TITLE" \
-		--admin_user="$WP_ADMIN_USR" \
+		--admin_user="$WP_ADMIN_USER" \
 		--admin_password="$WP_ADMIN_PWD" \
 		--admin_email="$WP_ADMIN_EMAIL" \
 		--skip-email \
@@ -37,8 +37,8 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 fi
 
 # create wordpress user
-if ! wp user get "$WP_USR" --field=user_login --allow-root > /dev/null 2>&1; then
-    wp user create "$WP_USR" "$WP_EMAIL" --role=author --user_pass="$WP_PWD" --allow-root
+if ! wp user get "$WP_USER" --field=user_login --allow-root > /dev/null 2>&1; then
+    wp user create "$WP_USER" "$WP_EMAIL" --role=author --user_pass="$WP_PWD" --allow-root
 fi
 
 echo "Starting PHP-FPM..."

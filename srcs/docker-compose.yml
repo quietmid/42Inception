@@ -1,12 +1,12 @@
 services:
   mariadb:
     build: ./requirements/mariadb
-    image: mariadb
+    image: mariadb:1.0
     container_name: mariadb
     restart: always
     healthcheck:
-      # test: ["CMD", "mariadb", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PWD}", "-e", "SELECT 1;"]
-      test: ["CMD", "mariadb-admin", "ping", "--protocol=tcp", "--host=mariadb", "-u", "${MYSQL_USER}", "--password=${MYSQL_PWD}"]
+      test: ["CMD", "mariadb", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PWD}", "-e", "SELECT 1;"]
+      # test: ["CMD", "mariadb-admin", "ping", "--protocol=tcp", "--host=mariadb", "-u", "${MYSQL_USER}", "--password=${MYSQL_PWD}"]
       interval: 5s
       timeout: 60s
       retries: 12
@@ -14,7 +14,7 @@ services:
     env_file:
       - .env
     volumes:
-      - db_data:/lib/mysql
+      - db_data:/var/lib/mysql
     expose:
       - "3306"
     networks:

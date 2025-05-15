@@ -15,4 +15,4 @@ RUN chmod 644 /etc/my.cnf.d/my.cnf
 
 EXPOSE 3306
 
-ENTRYPOINT [ "/usr/local/bin/conf_db.sh" ]
+CMD [ "/usr/local/bin/conf_db.sh" ]

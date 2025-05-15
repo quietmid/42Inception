@@ -23,7 +23,7 @@ all: $(NAME)
 $(NAME): $(DATA_DIR_MARIADB) $(DATA_DIR_WP)
 	@echo "$(BLUE)Creating data directories...$(RESET)"
 	@echo "$(GREEN)Data directories created at $(DATA_DIR)$(RESET)"
-	cd srcs && docker compose up --build -d
+	cd srcs && docker compose up --build
 	touch $(NAME)
 
 $(DATA_DIR_MARIADB):
@@ -38,7 +38,7 @@ down:
 	cd srcs && docker compose down
 
 clean:
-	docker compose -f srcs/docker-compose.yml down --rmi all -v
+	docker compose -f $(COMPOSE) down --rmi all -v
 
 fclean: clean
 	@echo "$(YELLOW)Removing data directories...$(RESET)"

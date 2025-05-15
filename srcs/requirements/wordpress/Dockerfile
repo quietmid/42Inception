@@ -37,9 +37,9 @@ RUN curl -sSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-c
 
 COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
 
-COPY ./tools/ /usr/local/bin/
+COPY ./tools/wp_script.sh /usr/local/bin/wp_script.sh
 
-RUN chmod +x /usr/local/bin/*
+RUN chmod +x /usr/local/bin/wp_script.sh
 
 EXPOSE 9000
 
