@@ -1,79 +1,74 @@
 services:
-  mariadb:
-    build: ./requirements/mariadb
-    image: mariadb:1.0
-    container_name: mariadb
-    restart: always
-    healthcheck:
-      test: ["CMD", "mariadb", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PWD}", "-e", "SELECT 1;"]
-      # test: ["CMD", "mariadb-admin", "ping", "--protocol=tcp", "--host=mariadb", "-u", "${MYSQL_USER}", "--password=${MYSQL_PWD}"]
-      interval: 5s
-      timeout: 60s
-      retries: 12
-      start_period: 30s
-    env_file:
-      - .env
-    volumes:
-      - db_data:/var/lib/mysql
-    expose:
-      - "3306"
-    networks:
-      - inception
-  wordpress:
-    build: ./requirements/wordpress
-    container_name: wordpress
-    image: wordpress
-    env_file:
-      - .env
-    healthcheck:
-      test: ["CMD", "sh", "-c", "netstat -tuln | grep -q ':9000' || exit 1"]
-      interval: 5s
-      timeout: 60s
-      retries: 12
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    volumes:
-      - wordpress_data:/var/www/wordpress
-    expose:
-      - "9000"
-    networks:
-      - inception
-    restart: always
-  nginx:
-    build: ./requirements/nginx
-    container_name: nginx
-    image: nginx
-    env_file:
-      - .env
-    depends_on:
-      wordpress:
-        condition: service_healthy
-    ports:
-      - "443:443"
-    volumes:
-      - wordpress_data:/var/www/wordpress
-    networks:
-      - inception
-    restart: always
+    mariadb:
+        build: ./requirements/mariadb
+        image: mariadb:1.0
+        container_name: mariadb
+        restart: always
+        healthcheck:
+            test: ["CMD", "mariadb", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "-e", "SELECT 1;"]
+            interval: 5s
+            timeout: 60s
+            retries: 12
+        env_file:
+            - .env
+        volumes:
+            - mariadb_vol:/var/lib/mysql
+        expose:
+            - "3306"
+        networks:
+            - hiver
+    wordpress:
+        build: ./requirements/wordpress
+        image: wordpress:1.0
+        container_name: wordpress
+        restart: always
+        healthcheck:
+            test: ["CMD", "sh", "-c", "netstat -tuln | grep -q ':9000' || exit 1"]
+            interval: 5s
+            timeout: 60s
+            retries: 12
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        env_file:
+            - .env
+        volumes:
+            - wp_vol:/var/www/wordpress
+        expose:
+            - "9000"
+        networks:
+            - hiver
+    nginx:
+        build: ./requirements/nginx
+        image: nginx:1.0
+        container_name: nginx
+        restart: always
+        depends_on:
+            wordpress:
+                condition: service_healthy
+        env_file:
+            - .env
+        volumes:
+            - wp_vol:/var/www/wordpress
+        ports:
+            - "443:443"
+        networks:
+            - hiver
 
 volumes:
-  db_data:
-    name: db_data
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${HOME}/data/mariadb
-
-  wordpress_data:
-    name: wordpress_data
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${HOME}/data/wordpress
+    mariadb_vol:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ${HOME}/data/mariadb
+    wp_vol:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ${HOME}/data/wp
 
 networks:
-  inception:
-    driver: bridge
+    hiver:
+        driver: bridge
