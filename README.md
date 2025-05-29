@@ -50,4 +50,20 @@ docker exec -it <image-name> sh
 ```
 
 ## Makefile commands
+run the docker compose and build the neccessary directories for this project
+```
+make
+```
+Stop and removes the containers, removes all images built by docker-compose and removes the named volumes 
+```
+make clean
+```
+In addition to clean, this one will removes the data directories that we manually created for this project as well as the inception file that was created through $(NAME)
+```
+make fclean
+```
+Rebuild the project from the start again
+```
+make re
+```
 
