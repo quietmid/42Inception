@@ -1,61 +1,69 @@
 # Inception
 
-This project focuses on Docker and containerization. The goal is to set up a small infrastructure using Docker containers, including services:
+## Project:
+Inception focues on Docker and containerization. The goal of this project is to be familiarized with setting up Docker containers.
+
+## Core features
 - **NGINX** web server
 - **WordPress and PHP-FPM** application
 - **MariaDB** database
-
-The infrastructure is defined using Docker Compose, making it easy to reproduce and deploy.
-
-## Table of Contents
-1. [Requirements](#requirements)
-2. [Setup](#setup)
-3. [Usage](#usage)
-5. [Project Structure](#project-structure)
-6. [Docker Images](#docker-images)
-7. [Networking](#networking)
-8. [Volumes](#volumes)
-9. [Security](#security)
-10. [Contributing](#contributing)
+- **Docker Compose** for clarity in defining multi-container application
 
 ## Requirements
-- Docker installed on your machine.
-- Docker Compose installed.
-- Basic knowledge of Docker and containerization.
+- Docker installed
+- Docker Compose installed
+- Basic understanding of Docker and containerization
 
-## Setup
-1. Clone this repository:
-   ```bash
-   git clone git@github.com:hoangfin/inception.git && cd inception
-   ```
+## Usage
+Before testing Inception, you need to download Docker and Docker Compose (if you can download Docker Desktop then it will have both).
+Head to https://www.docker.com/products/docker-desktop to download Docker Destop. 
+Once you have Docker installed, launch the application. 
+Open the terminal and run:
+```
+docker --version
+docker compose version
+```
+You should see similar output to these
+```
+Docker version 28.1.1, build 4eba377
+Docker Compose version v2.35.1-desktop.1
+```
+Now you can git clone the project and enter the project directory and 
+```
+make
+```
 
-## Project Structure
+## Docker Commands
+you can check the containers with
 ```
-inception/
-|-- srcs/
-|   |-- requirements/
-|   |   |-- mariadb/
-|   |   |   |-- conf/
-|   |   |   |   |-- mariadb-server.cnf
-|   |   |   |-- tools/
-|   |   |   |   |-- entrypoint.sh
-|   |   |   |-- .dockerignore
-|   |   |   |-- Dockerfile
-|   |   |-- nginx/
-|   |   |   |-- conf/
-|   |   |   |   |-- default.conf
-|   |   |   |-- tools/
-|   |   |   |-- .dockerignore
-|   |   |   |-- Dockerfile
-|   |   |-- wordpress/
-|   |   |   |-- conf/
-|   |   |   |   |-- www.conf
-|   |   |   |-- tools/
-|   |   |   |   |-- entrypoint.sh
-|   |   |   |-- .dockerignore
-|   |   |   |-- Dockerfile
-|   |-- .env (educational purpose only)
-|   |-- docker-compose.yml
-|-- Makefile
-|-- README.md
+docker ps
 ```
+Docker volumes:
+```
+docker volume ls
+or
+docker volume inspect <volume-name>
+```
+Interacting with Docker exec command to open the interactive terminal inside a Docker container for debugging, inspecting and manually interacting with the container
+```
+docker exec -it <image-name> sh
+```
+
+## Makefile commands
+run the docker compose and build the neccessary directories for this project
+```
+make
+```
+Stop and removes the containers, removes all images built by docker-compose and removes the named volumes 
+```
+make clean
+```
+In addition to clean, this one will removes the data directories that we manually created for this project as well as the inception file that was created through $(NAME)
+```
+make fclean
+```
+Rebuild the project from the start again
+```
+make re
+```
+
