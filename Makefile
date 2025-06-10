@@ -20,7 +20,7 @@ all: $(NAME)
 $(NAME): $(DATA_DIR_MARIADB) $(DATA_DIR_WP)
 	@echo "$(BLUE)Creating data directories...$(RESET)"
 	@echo "$(GREEN)Data directories created at $(DATA_DIR)$(RESET)"
-	@docker compose -p $(NAME) -f $(DOCKER_COMPOSE_YML) up --build
+	@docker compose -p $(NAME) -f $(DOCKER_COMPOSE_YML) up --build -d
 	touch $(NAME)
 
 $(DATA_DIR_MARIADB):
